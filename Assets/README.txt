@@ -1,0 +1,16 @@
+Assets>Scenesの下にあるTestSceneを実行
+
+WASDで移動,マウス左クリックで剣を振る(InputManagerのAxesを利用しているが、
+コントローラーでのテストプレイをしていないので動作未確認です)
+
+自分で制作した部分
+Scriptsの下にあるPlayerCotollerとSwordController
+AnimatorのSetTriggerを利用してアニメーションを推移させたが、剣を振っている途中に
+もう一度Triggerを使うと剣を振り終えたタイミングで勝手に剣を振ってしまったが、
+ResatTriggerを使うことで解決した
+
+剣をCylinderで代用してアバターの右手の子オブジェクトにして持たせた
+
+地面にTerrainを利用してみた、まだうまく使えてないがいい感じに地形を作りたい。
+
+これから敵キャラクターやHPを実装してゲーム性を出していきたい。
