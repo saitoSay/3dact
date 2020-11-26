@@ -15,6 +15,18 @@ public class PlayerController : MonoBehaviour
     /// ターンの速さ
     /// </summary>
     [SerializeField] float m_turnSpeed = 3f;
+    /// <summary>
+    /// ダッシュのインターバルの長さ
+    /// </summary>
+    [SerializeField] float m_dashInterval = 1f;
+    /// <summary>
+    /// ダッシュ後の経過時間
+    /// </summary>
+    float m_dashTime = 0;
+    /// <summary>
+    /// 最高速度
+    /// </summary>
+    float m_maxSpeed = 5f;
     Rigidbody m_rb;
     Animator m_anim;
 
@@ -28,6 +40,7 @@ public class PlayerController : MonoBehaviour
     {
         float v = Input.GetAxisRaw("Vertical");
         float h = Input.GetAxisRaw("Horizontal");
+        m_dashTime += Time.deltaTime;
 
         // 入力された方向を変換する
         Vector3 dir = Vector3.forward * v + Vector3.right * h;
@@ -50,8 +63,16 @@ public class PlayerController : MonoBehaviour
             Vector3 velo = dir.normalized * m_movingSpeed; // 入力した方向に移動する
             //velo.y = m_rb.velocity.y;   // ジャンプした時の y 軸方向の速度を保持する
             m_rb.velocity = velo;  // 計算した速度ベクトルをセットする
-            Debug.Log(m_rb.velocity);
         }
+        if (Input.GetButtonDown("Fire1"))
+        {
+            m_anim.SetTrigger("fire");
+        }
+        else
+        {
+            m_anim.ResetTrigger("fire");
+        }
+      
     }
     void LateUpdate()
     {
