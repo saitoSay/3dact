@@ -61,7 +61,7 @@ public class PlayerController : MonoBehaviour
             this.transform.rotation = Quaternion.Slerp(this.transform.rotation, targetRotation, Time.deltaTime * m_turnSpeed);  // Slerp を使うのがポイント
 
             Vector3 velo = dir.normalized * m_movingSpeed; // 入力した方向に移動する
-            //velo.y = m_rb.velocity.y;   // ジャンプした時の y 軸方向の速度を保持する
+            velo.y = m_rb.velocity.y;   // ジャンプした時の y 軸方向の速度を保持する
             m_rb.velocity = velo;  // 計算した速度ベクトルをセットする
         }
         if (Input.GetButtonDown("Fire1"))
