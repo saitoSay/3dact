@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour
     float m_maxSpeed = 5f;
     Rigidbody m_rb;
     Animator m_anim;
+    [SerializeField] GameObject attackCollider = null;
 
     void Start()
     {
@@ -81,5 +82,12 @@ public class PlayerController : MonoBehaviour
         horizontalVelocity.y = 0;
         m_anim.SetFloat("Speed", horizontalVelocity.magnitude);
     }
-
+    public void BiginAttack()
+    {
+        attackCollider.SetActive(true);
+    }
+    public void EndAttack()
+    {
+        attackCollider.SetActive(false);
+    }
 }
