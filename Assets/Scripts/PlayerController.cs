@@ -7,30 +7,16 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody), typeof(Animator))]
 public class PlayerController : MonoBehaviour
 {
-    /// <summary>
-    /// 動く速さ
-    /// </summary>
+    
     [SerializeField] float m_movingSpeed = 5f;
-    /// <summary>
-    /// ターンの速さ
-    /// </summary>
     [SerializeField] float m_turnSpeed = 3f;
-    /// <summary>
-    /// ダッシュのインターバルの長さ
-    /// </summary>
     [SerializeField] float m_dashInterval = 1f;
-    /// <summary>
-    /// ダッシュ後の経過時間
-    /// </summary>
     float m_dashTime = 0;
-    /// <summary>
-    /// 最高速度
-    /// </summary>
     float m_maxSpeed = 5f;
     Rigidbody m_rb;
     Animator m_anim;
-    [SerializeField] GameObject attackCollider = null;
-
+    [SerializeField] GameObject m_attackCollider = null;
+    //[SerializeField] bool m_moveCheck = true;
     void Start()
     {
         m_rb = GetComponent<Rigidbody>();
@@ -45,6 +31,14 @@ public class PlayerController : MonoBehaviour
 
         // 入力された方向を変換する
         Vector3 dir = Vector3.forward * v + Vector3.right * h;
+        if (Input.GetButtonDown("Fire1"))
+        {
+            m_anim.SetTrigger("fire");
+        }
+        else
+        {
+            m_anim.ResetTrigger("fire");
+        }
 
         if (dir == Vector3.zero)
         {
@@ -65,15 +59,7 @@ public class PlayerController : MonoBehaviour
             velo.y = m_rb.velocity.y;   // ジャンプした時の y 軸方向の速度を保持する
             m_rb.velocity = velo;  // 計算した速度ベクトルをセットする
         }
-        if (Input.GetButtonDown("Fire1"))
-        {
-            m_anim.SetTrigger("fire");
-        }
-        else
-        {
-            m_anim.ResetTrigger("fire");
-        }
-      
+        
     }
     void LateUpdate()
     {
@@ -84,10 +70,11 @@ public class PlayerController : MonoBehaviour
     }
     public void BiginAttack()
     {
-        attackCollider.SetActive(true);
+        m_attackCollider.SetActive(true);
     }
     public void EndAttack()
     {
-        attackCollider.SetActive(false);
+        m_attackCollider.SetActive(false);
     }
+    
 }
