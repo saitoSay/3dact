@@ -8,7 +8,7 @@ public class AttackController : MonoBehaviour
     {
         if (other.gameObject.tag == "Enemy")
         {
-            Destroy(other.gameObject);
+            other.gameObject.GetComponent<EnemyController>().Damage();
         }
     }
 }
