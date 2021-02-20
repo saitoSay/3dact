@@ -39,11 +39,19 @@ public class PlayerController : MonoBehaviour
         {
             if (m_lockonFrag)
             {
-                this.transform.LookAt(m_enemyDetector.Target.transform.position);
-                m_anim.SetTrigger("fire");
+                if (m_enemyDetector.Target == null)
+                {
+                    m_lockonFrag = false;
+                    m_anim.SetTrigger("fire");
+                }
+                else
+                {
+                    this.transform.LookAt(m_enemyDetector.Target.transform.position);
+                    m_anim.SetTrigger("fire");
+                }
+                
             }
             else m_anim.SetTrigger("fire");
-
         }
         else
         {
@@ -55,10 +63,6 @@ public class PlayerController : MonoBehaviour
             if (m_enemyDetector.Target && !m_lockonFrag)
             {
                 m_lockonFrag = true;
-            }
-            else if (m_enemyDetector == null)
-            {
-                m_lockonFrag = false;
             }
             else
             {
