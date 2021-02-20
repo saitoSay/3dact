@@ -12,37 +12,60 @@ public class PlayerController : MonoBehaviour
     
     [SerializeField] float m_movingSpeed = 5f;
     [SerializeField] float m_turnSpeed = 3f;
-    [SerializeField] float m_dashInterval = 1f;
-    float m_dashTime = 0;
-    float m_maxSpeed = 5f;
+    
     Rigidbody m_rb;
     Animator m_anim;
     [SerializeField] GameObject m_attackCollider = null;
     [SerializeField] int m_life = 1;
     [SerializeField] int m_maxLife = 2;
     [SerializeField] Slider m_lifeGauge = null;
+    [SerializeField] bool m_lockonFrag = false;
+    EnemyDetector m_enemyDetector = null;
     void Start()
     {
         m_rb = GetComponent<Rigidbody>();
         m_anim = GetComponent<Animator>();
+        m_enemyDetector = GetComponent<EnemyDetector>();
     }
 
     void Update()
     {
         float v = Input.GetAxisRaw("Vertical");
         float h = Input.GetAxisRaw("Horizontal");
-        m_dashTime += Time.deltaTime;
-
+        
         // 入力された方向を変換する
         Vector3 dir = Vector3.forward * v + Vector3.right * h;
         if (Input.GetButtonDown("Fire1"))
         {
-            m_anim.SetTrigger("fire");
+            if (m_lockonFrag)
+            {
+                this.transform.LookAt(m_enemyDetector.Target.transform.position);
+                m_anim.SetTrigger("fire");
+            }
+            else m_anim.SetTrigger("fire");
+
         }
         else
         {
             m_anim.ResetTrigger("fire");
         }
+        //ロックオン切り替え
+        if (Input.GetButtonDown("Fire2"))
+        {
+            if (m_enemyDetector.Target && !m_lockonFrag)
+            {
+                m_lockonFrag = true;
+            }
+            else if (m_enemyDetector == null)
+            {
+                m_lockonFrag = false;
+            }
+            else
+            {
+                m_lockonFrag = false;
+            }
+        }
+        
 
         if (dir == Vector3.zero)
         {
@@ -63,7 +86,6 @@ public class PlayerController : MonoBehaviour
             velo.y = m_rb.velocity.y;   // ジャンプした時の y 軸方向の速度を保持する
             m_rb.velocity = velo;  // 計算した速度ベクトルをセットする
         }
-        
     }
     void LateUpdate()
     {
@@ -98,9 +120,6 @@ public class PlayerController : MonoBehaviour
                 },
                 (float)m_life / m_maxLife,
                 1f);
-
         }
-
-
     }
 }
