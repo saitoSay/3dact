@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using DG.Tweening;
 /// <summary>
 /// プレイヤーの挙動を制御するコンポーネント
 /// </summary>
@@ -16,7 +18,9 @@ public class PlayerController : MonoBehaviour
     Rigidbody m_rb;
     Animator m_anim;
     [SerializeField] GameObject m_attackCollider = null;
-    //[SerializeField] bool m_moveCheck = true;
+    [SerializeField] int m_life = 1;
+    [SerializeField] int m_maxLife = 2;
+    [SerializeField] Slider m_lifeGauge = null;
     void Start()
     {
         m_rb = GetComponent<Rigidbody>();
@@ -76,5 +80,27 @@ public class PlayerController : MonoBehaviour
     {
         m_attackCollider.SetActive(false);
     }
-    
+
+    public void Damage()
+    {
+        m_life -= 1;
+        if (m_life <= 0)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            
+            DOTween.To(() => m_lifeGauge.value,
+                l =>
+                {
+                    m_lifeGauge.value = l;
+                },
+                (float)m_life / m_maxLife,
+                1f);
+
+        }
+
+
+    }
 }

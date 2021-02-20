@@ -13,10 +13,11 @@ public class EnemyController : MonoBehaviour
     void Start()
     {
         m_life = m_maxLife;
-        //m_lifeGauge.gameObject.SetActive(false);
+        m_lifeGauge.gameObject.SetActive(false);
     }
     public void Damage()
     {
+        m_lifeGauge.gameObject.SetActive(true);
         m_life -= 3;
         if (m_life <= 0)
         {
@@ -28,10 +29,6 @@ public class EnemyController : MonoBehaviour
             DOTween.To(() => m_lifeGauge.value, 
                 l =>
                 {
-                    if (m_life <= 0)
-                    {
-                        m_lifeGauge.value = l;
-                    }
                     m_lifeGauge.value = l;
                 },
                 (float)m_life / m_maxLife,
