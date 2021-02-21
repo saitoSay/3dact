@@ -33,8 +33,6 @@ public class EnemyController : MonoBehaviour
                 },
                 (float)m_life / m_maxLife,
                 1f);
-
         }
-
     }
 }

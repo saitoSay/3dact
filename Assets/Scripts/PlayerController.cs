@@ -21,8 +21,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Slider m_lifeGauge = null;
     [SerializeField] bool m_lockonFrag = false;
     EnemyDetector m_enemyDetector = null;
+    GameObject[] images;
+
     void Start()
     {
+        images = GameObject.FindGameObjectsWithTag("Image");
+        foreach (var item in images)
+        {
+            item.SetActive(false);
+        }
         m_rb = GetComponent<Rigidbody>();
         m_anim = GetComponent<Animator>();
         m_enemyDetector = GetComponent<EnemyDetector>();
@@ -63,10 +70,21 @@ public class PlayerController : MonoBehaviour
             if (m_enemyDetector.Target && !m_lockonFrag)
             {
                 m_lockonFrag = true;
+                GameObject canvas = m_enemyDetector.Target.transform.Find("Canvas").gameObject;
+                GameObject lockonIcon = canvas.transform.Find("Image").gameObject;
+                foreach (var item in images)
+                {
+                    item.SetActive(false);
+                }
+                lockonIcon.SetActive(true);
             }
             else
             {
                 m_lockonFrag = false;
+                foreach (var item in images)
+                {
+                    item.SetActive(false);
+                }
             }
         }
         
