@@ -72,6 +72,7 @@ public class PlayerController : MonoBehaviour
                 m_lockonFrag = true;
                 GameObject canvas = m_enemyDetector.Target.transform.Find("Canvas").gameObject;
                 GameObject lockonIcon = canvas.transform.Find("Image").gameObject;
+                images = GameObject.FindGameObjectsWithTag("Image");
                 foreach (var item in images)
                 {
                     item.SetActive(false);
@@ -81,13 +82,17 @@ public class PlayerController : MonoBehaviour
             else
             {
                 m_lockonFrag = false;
+                images = GameObject.FindGameObjectsWithTag("Image");
                 foreach (var item in images)
                 {
                     item.SetActive(false);
                 }
             }
         }
-        
+        if (!m_enemyDetector.Target)
+        {
+            m_lockonFrag = false;
+        }
 
         if (dir == Vector3.zero)
         {
