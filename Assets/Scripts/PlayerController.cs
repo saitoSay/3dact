@@ -19,17 +19,17 @@ public class PlayerController : MonoBehaviour
     [SerializeField] int m_life = 1;
     [SerializeField] int m_maxLife = 2;
     [SerializeField] Slider m_lifeGauge = null;
-    [SerializeField] bool m_lockonFrag = false;
+    //[SerializeField] bool m_lockonFrag = false;
     EnemyDetector m_enemyDetector = null;
     GameObject[] images;
 
     void Start()
     {
-        images = GameObject.FindGameObjectsWithTag("Image");
-        foreach (var item in images)
-        {
-            item.SetActive(false);
-        }
+        //images = GameObject.FindGameObjectsWithTag("Image");
+        //foreach (var item in images)
+        //{
+        //    item.SetActive(false);
+        //}
         m_rb = GetComponent<Rigidbody>();
         m_anim = GetComponent<Animator>();
         m_enemyDetector = GetComponent<EnemyDetector>();
@@ -44,55 +44,59 @@ public class PlayerController : MonoBehaviour
         Vector3 dir = Vector3.forward * v + Vector3.right * h;
         if (Input.GetButtonDown("Fire1"))
         {
-            if (m_lockonFrag)
+            //if (m_lockonFrag)
+            //{
+            //    if (m_enemyDetector.Target == null)
+            //    {
+            //        m_lockonFrag = false;
+            //        m_anim.SetTrigger("fire");
+            //    }
+            //    else
+            //    {
+            //        this.transform.LookAt(m_enemyDetector.Target.transform.position);
+            //        m_anim.SetTrigger("fire");
+            //    }
+
+            //}
+            if (EnemyDetector.m_lockonFrag)
             {
-                if (m_enemyDetector.Target == null)
-                {
-                    m_lockonFrag = false;
-                    m_anim.SetTrigger("fire");
-                }
-                else
-                {
-                    this.transform.LookAt(m_enemyDetector.Target.transform.position);
-                    m_anim.SetTrigger("fire");
-                }
-                
+                this.transform.LookAt(m_enemyDetector.Target.transform.position);
             }
-            else m_anim.SetTrigger("fire");
+            m_anim.SetTrigger("fire");
         }
         else
         {
             m_anim.ResetTrigger("fire");
         }
         //ロックオン切り替え
-        if (Input.GetButtonDown("Fire2"))
-        {
-            if (m_enemyDetector.Target && !m_lockonFrag)
-            {
-                m_lockonFrag = true;
-                GameObject canvas = m_enemyDetector.Target.transform.Find("Canvas").gameObject;
-                GameObject lockonIcon = canvas.transform.Find("Image").gameObject;
-                images = GameObject.FindGameObjectsWithTag("Image");
-                foreach (var item in images)
-                {
-                    item.SetActive(false);
-                }
-                lockonIcon.SetActive(true);
-            }
-            else
-            {
-                m_lockonFrag = false;
-                images = GameObject.FindGameObjectsWithTag("Image");
-                foreach (var item in images)
-                {
-                    item.SetActive(false);
-                }
-            }
-        }
-        if (!m_enemyDetector.Target)
-        {
-            m_lockonFrag = false;
-        }
+        //if (Input.GetButtonDown("Fire2"))
+        //{
+        //    if (m_enemyDetector.Target && !m_lockonFrag)
+        //    {
+        //        m_lockonFrag = true;
+        //        GameObject canvas = m_enemyDetector.Target.transform.Find("Canvas").gameObject;
+        //        GameObject lockonIcon = canvas.transform.Find("Image").gameObject;
+        //        images = GameObject.FindGameObjectsWithTag("Image");
+        //        foreach (var item in images)
+        //        {
+        //            item.SetActive(false);
+        //        }
+        //        lockonIcon.SetActive(true);
+        //    }
+        //    else
+        //    {
+        //        m_lockonFrag = false;
+        //        images = GameObject.FindGameObjectsWithTag("Image");
+        //        foreach (var item in images)
+        //        {
+        //            item.SetActive(false);
+        //        }
+        //    }
+        //}
+        //if (!m_enemyDetector.Target)
+        //{
+        //    m_lockonFrag = false;
+        //}
 
         if (dir == Vector3.zero)
         {

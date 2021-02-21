@@ -10,7 +10,18 @@ public class EnemyDetector : MonoBehaviour
     [SerializeField] float m_detectInterval = 1f;
     /// <summary>ロックオンしているオブジェクト</summary>
     GameObject m_target = null;
+    public static bool m_lockonFrag = false;
     float m_timer;
+
+    GameObject[] images;
+    private void Start()
+    {
+        images = GameObject.FindGameObjectsWithTag("Image");
+        foreach (var item in images)
+        {
+            item.SetActive(false);
+        }
+    }
 
     /// <summary>
     /// ロックオンしている敵を取得する
@@ -22,6 +33,37 @@ public class EnemyDetector : MonoBehaviour
 
     void Update()
     {
+        //ロックオン切り替え
+        if (Input.GetButtonDown("Fire2"))
+        {
+            if (Target && !m_lockonFrag)
+            {
+                m_lockonFrag = true;
+                GameObject canvas = Target.transform.Find("Canvas").gameObject;
+                GameObject lockonIcon = canvas.transform.Find("Image").gameObject;
+                images = GameObject.FindGameObjectsWithTag("Image");
+                foreach (var item in images)
+                {
+                    item.SetActive(false);
+                }
+                lockonIcon.SetActive(true);
+            }
+            else
+            {
+                m_lockonFrag = false;
+                images = GameObject.FindGameObjectsWithTag("Image");
+                foreach (var item in images)
+                {
+                    item.SetActive(false);
+                }
+            }
+        }
+        if (!Target)
+        {
+            m_lockonFrag = false;
+        }
+
+
         m_timer += Time.deltaTime;
 
         // 一定間隔で検出を行う
@@ -34,13 +76,11 @@ public class EnemyDetector : MonoBehaviour
 
             foreach (var enemy in enemyArray)
             {
-                // 索敵範囲外の敵は処理しない
                 float distance = Vector3.Distance(this.transform.position, enemy.transform.position);
 
                 if (distance < m_targetRange)
                 {
-                    // ロックオンしている敵がいない場合は、enemy をロックオンする。現在の target より enemy が近くに居る場合は、enemy をロックオンする。
-                    if (m_target == null || distance < Vector3.Distance(this.transform.position, m_target.transform.position))
+                    if (m_target == null || distance < Vector3.Distance(this.transform.position, m_target.transform.position) && !m_lockonFrag)
                     {
                         m_target = enemy;
                     }
@@ -54,11 +94,11 @@ public class EnemyDetector : MonoBehaviour
             if (m_targetRange < Vector3.Distance(this.transform.position, m_target.transform.position))
             {
                 m_target = null;
-            }
-            else
-            {
-                // ロックオンしている敵まで線を引く
-                Debug.DrawLine(this.gameObject.transform.position, m_target.transform.position, Color.red);
+                images = GameObject.FindGameObjectsWithTag("Image");
+                foreach (var item in images)
+                {
+                    item.SetActive(false);
+                }
             }
         }
     }
