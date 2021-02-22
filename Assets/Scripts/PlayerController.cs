@@ -25,11 +25,6 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        //images = GameObject.FindGameObjectsWithTag("Image");
-        //foreach (var item in images)
-        //{
-        //    item.SetActive(false);
-        //}
         m_rb = GetComponent<Rigidbody>();
         m_anim = GetComponent<Animator>();
         m_enemyDetector = GetComponent<EnemyDetector>();
@@ -44,20 +39,6 @@ public class PlayerController : MonoBehaviour
         Vector3 dir = Vector3.forward * v + Vector3.right * h;
         if (Input.GetButtonDown("Fire1"))
         {
-            //if (m_lockonFrag)
-            //{
-            //    if (m_enemyDetector.Target == null)
-            //    {
-            //        m_lockonFrag = false;
-            //        m_anim.SetTrigger("fire");
-            //    }
-            //    else
-            //    {
-            //        this.transform.LookAt(m_enemyDetector.Target.transform.position);
-            //        m_anim.SetTrigger("fire");
-            //    }
-
-            //}
             if (EnemyDetector.m_lockonFrag)
             {
                 this.transform.LookAt(m_enemyDetector.Target.transform.position);
@@ -68,36 +49,7 @@ public class PlayerController : MonoBehaviour
         {
             m_anim.ResetTrigger("fire");
         }
-        //ロックオン切り替え
-        //if (Input.GetButtonDown("Fire2"))
-        //{
-        //    if (m_enemyDetector.Target && !m_lockonFrag)
-        //    {
-        //        m_lockonFrag = true;
-        //        GameObject canvas = m_enemyDetector.Target.transform.Find("Canvas").gameObject;
-        //        GameObject lockonIcon = canvas.transform.Find("Image").gameObject;
-        //        images = GameObject.FindGameObjectsWithTag("Image");
-        //        foreach (var item in images)
-        //        {
-        //            item.SetActive(false);
-        //        }
-        //        lockonIcon.SetActive(true);
-        //    }
-        //    else
-        //    {
-        //        m_lockonFrag = false;
-        //        images = GameObject.FindGameObjectsWithTag("Image");
-        //        foreach (var item in images)
-        //        {
-        //            item.SetActive(false);
-        //        }
-        //    }
-        //}
-        //if (!m_enemyDetector.Target)
-        //{
-        //    m_lockonFrag = false;
-        //}
-
+        
         if (dir == Vector3.zero)
         {
             // 方向の入力がニュートラルの時は、y 軸方向の速度を維持しながら xy 軸平面上は減速する

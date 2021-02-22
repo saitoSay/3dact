@@ -10,11 +10,40 @@ public class EnemyController : MonoBehaviour
     [SerializeField] int m_maxLife = 2;
     [SerializeField] Slider m_lifeGauge = null;
 
+    [SerializeField] float m_targetRange = 4f;
+    [SerializeField] float m_attackRange = 2f;
+    [SerializeField] float m_detectInterval = 1f;
+    [SerializeField] float m_turnSpeed = 3f;
+    GameObject m_player = null;
+    float m_timer;
     void Start()
     {
         m_life = m_maxLife;
         m_lifeGauge.gameObject.SetActive(false);
     }
+    void Update()
+    {
+        m_player = GameObject.FindGameObjectWithTag("Player");
+
+        float distance = Vector3.Distance(this.transform.position, m_player.transform.position);
+
+        if (distance < m_targetRange)
+        {
+            transform.LookAt(m_player.transform);
+        }
+
+        // ロックオンしているターゲットが索敵範囲外に出たらロックオンをやめる
+        if (m_player)
+        {
+            if (m_targetRange < Vector3.Distance(this.transform.position, m_player.transform.position))
+            {
+                m_player = null;
+            }
+        }
+    }
+
+
+
     public void Damage()
     {
         m_lifeGauge.gameObject.SetActive(true);
@@ -25,7 +54,6 @@ public class EnemyController : MonoBehaviour
         }
         else
         {
-            // m_lifeGauge.value = (float)m_life / m_maxLife;
             DOTween.To(() => m_lifeGauge.value, 
                 l =>
                 {
