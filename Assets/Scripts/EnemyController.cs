@@ -20,7 +20,8 @@ public class EnemyController : MonoBehaviour
     Animator m_anim;
     GameObject m_player = null;
     Rigidbody m_rb;
-    bool dieFrag = false;
+    public bool m_damageFrag = false;
+    bool m_dieFrag = false;
     void Start()
     {
         m_life = m_maxLife;
@@ -34,14 +35,17 @@ public class EnemyController : MonoBehaviour
         if (m_player)
         {
             float distance = Vector3.Distance(this.transform.position, m_player.transform.position);
-
-            if (distance < m_targetRange && !dieFrag)
+            if (m_damageFrag)
+            {
+                m_rb.velocity = new Vector3(0, m_rb.velocity.y, 0);
+            }
+            else if (distance < m_targetRange && !m_dieFrag)
             {
                 m_player = GameObject.FindGameObjectWithTag("Player");
-
                 Vector3 dir = m_player.transform.position - this.transform.position;
-                dir.y = 0;  // 上下方向は無視する
+                dir.y = 0;
                 this.transform.forward = dir;
+
                 if (distance < m_attackRange)
                 {
                     m_anim.SetTrigger("AttackFrag");
@@ -57,7 +61,6 @@ public class EnemyController : MonoBehaviour
                 m_rb.velocity = new Vector3(0, m_rb.velocity.y, 0);
             }
         }
-        // ロックオンしているターゲットが索敵範囲外に出たらロックオンをやめる
         if (m_player)
         {
             if (m_targetRange < Vector3.Distance(this.transform.position, m_player.transform.position))
@@ -68,15 +71,17 @@ public class EnemyController : MonoBehaviour
     }
     public void ResetAnim()
     {
+        m_damageFrag = false;
         m_anim.ResetTrigger("AttackFrag");
     }
     public void Damage()
     {
+        m_damageFrag = true;
         m_lifeGauge.gameObject.SetActive(true);
         m_life -= 3;
         if (m_life <= 0)
         {
-            dieFrag = true;
+            m_dieFrag = true;
             m_anim.Play("Die");
             DOTween.To(() => m_lifeGauge.value,
                 l =>

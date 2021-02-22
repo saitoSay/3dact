@@ -19,8 +19,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] int m_life = 1;
     [SerializeField] int m_maxLife = 2;
     [SerializeField] Slider m_lifeGauge = null;
-    //[SerializeField] bool m_lockonFrag = false;
     EnemyDetector m_enemyDetector = null;
+    public static bool s_damageFrag = false;
 
     void Start()
     {
@@ -34,7 +34,6 @@ public class PlayerController : MonoBehaviour
         float v = Input.GetAxisRaw("Vertical");
         float h = Input.GetAxisRaw("Horizontal");
         
-        // 入力された方向を変換する
         Vector3 dir = Vector3.forward * v + Vector3.right * h;
         if (Input.GetButtonDown("Fire1"))
         {
@@ -51,26 +50,22 @@ public class PlayerController : MonoBehaviour
         
         if (dir == Vector3.zero)
         {
-            // 方向の入力がニュートラルの時は、y 軸方向の速度を維持しながら xy 軸平面上は減速する
             m_rb.velocity = new Vector3(0f, m_rb.velocity.y, 0f);
         }
         else
         {
-            // カメラを基準に入力が上下=奥/手前, 左右=左右にキャラクターを向ける
-            dir = Camera.main.transform.TransformDirection(dir);    // メインカメラを基準に入力方向のベクトルを変換する
-            dir.y = 0;  // y 軸方向はゼロにして水平方向のベクトルにする
+            dir = Camera.main.transform.TransformDirection(dir); 
+            dir.y = 0;
 
-            // 入力方向に滑らかに回転させる
             Quaternion targetRotation = Quaternion.LookRotation(dir);
             this.transform.rotation = Quaternion.Slerp(this.transform.rotation, targetRotation, Time.deltaTime * m_turnSpeed);  // Slerp を使うのがポイント
 
-            Vector3 velo = dir.normalized * m_movingSpeed; // 入力した方向に移動するvelo.y = m_rb.velocity.y;   // ジャンプした時の y 軸方向の速度を保持する
-            m_rb.velocity = velo;  // 計算した速度ベクトルをセットする
+            Vector3 velo = dir.normalized * m_movingSpeed; 
+            m_rb.velocity = velo;
         }
     }
     void LateUpdate()
     {
-        // 水平方向の速度を求めて Animator Controller のパラメーターに渡す
         Vector3 horizontalVelocity = m_rb.velocity;
         horizontalVelocity.y = 0;
         m_anim.SetFloat("Speed", horizontalVelocity.magnitude);
@@ -102,7 +97,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            
+            m_anim.Play("Damaged");
             DOTween.To(() => m_lifeGauge.value,
                 l =>
                 {
