@@ -75,6 +75,15 @@ public class PlayerController : MonoBehaviour
         horizontalVelocity.y = 0;
         m_anim.SetFloat("Speed", horizontalVelocity.magnitude);
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "EnemyAttack")
+        {
+            Damage();
+        }
+    }
+
     public void BiginAttack()
     {
         m_attackCollider.SetActive(true);

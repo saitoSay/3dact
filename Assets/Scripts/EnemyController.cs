@@ -31,31 +31,32 @@ public class EnemyController : MonoBehaviour
     void Update()
     {
         m_player = GameObject.FindGameObjectWithTag("Player");
-
-        float distance = Vector3.Distance(this.transform.position, m_player.transform.position);
-
-        if (distance < m_targetRange && !dieFrag)
+        if (m_player)
         {
-            m_player = GameObject.FindGameObjectWithTag("Player");
+            float distance = Vector3.Distance(this.transform.position, m_player.transform.position);
 
-            Vector3 dir = m_player.transform.position - this.transform.position;
-            dir.y = 0;  // 上下方向は無視する
-            this.transform.forward = dir;
-            if (distance < m_attackRange)
+            if (distance < m_targetRange && !dieFrag)
             {
-                m_anim.SetTrigger("AttackFrag");
+                m_player = GameObject.FindGameObjectWithTag("Player");
+
+                Vector3 dir = m_player.transform.position - this.transform.position;
+                dir.y = 0;  // 上下方向は無視する
+                this.transform.forward = dir;
+                if (distance < m_attackRange)
+                {
+                    m_anim.SetTrigger("AttackFrag");
+                    m_rb.velocity = new Vector3(0, m_rb.velocity.y, 0);
+                }
+                else if (m_rb.velocity.magnitude < m_maxSpeed)
+                {
+                    m_rb.AddForce(this.transform.forward * m_movePower);
+                }
+            }
+            else
+            {
                 m_rb.velocity = new Vector3(0, m_rb.velocity.y, 0);
             }
-            else if (m_rb.velocity.magnitude < m_maxSpeed)
-            {
-                m_rb.AddForce(this.transform.forward * m_movePower);
-            }
         }
-        else
-        {
-            m_rb.velocity = new Vector3(0, m_rb.velocity.y, 0);
-        }
-
         // ロックオンしているターゲットが索敵範囲外に出たらロックオンをやめる
         if (m_player)
         {
