@@ -9,10 +9,10 @@ using DG.Tweening;
 [RequireComponent(typeof(Rigidbody), typeof(Animator))]
 public class PlayerController : MonoBehaviour
 {
-    
+
     [SerializeField] float m_movingSpeed = 5f;
     [SerializeField] float m_turnSpeed = 3f;
-    
+
     Rigidbody m_rb;
     Animator m_anim;
     [SerializeField] GameObject m_attackCollider = null;
@@ -20,10 +20,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] int m_maxLife = 2;
     [SerializeField] Slider m_lifeGauge = null;
     EnemyDetector m_enemyDetector = null;
-    public static bool s_damageFrag = false;
+    public static PlayerController Instance { get; private set; }
+    public bool m_damageFrag = false;
 
     void Start()
     {
+        Instance = this;
         m_rb = GetComponent<Rigidbody>();
         m_anim = GetComponent<Animator>();
         m_enemyDetector = GetComponent<EnemyDetector>();
