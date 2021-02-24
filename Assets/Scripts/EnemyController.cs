@@ -22,8 +22,12 @@ public class EnemyController : MonoBehaviour
     Rigidbody m_rb;
     public bool m_damageFrag = false;
     bool m_dieFrag = false;
+
+    AudioSource audioSource;
+    [SerializeField] AudioClip m_damageSound;
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         m_life = m_maxLife;
         m_lifeGauge.gameObject.SetActive(false);
         m_rb = GetComponent<Rigidbody>();
@@ -76,6 +80,7 @@ public class EnemyController : MonoBehaviour
     }
     public void Damage()
     {
+        audioSource.PlayOneShot(m_damageSound);
         m_damageFrag = true;
         m_lifeGauge.gameObject.SetActive(true);
         m_life -= 3;

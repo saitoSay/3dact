@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 /// <summary>
-/// プレイヤーの挙動を制御するコンポーネント
+/// プレイヤー
 /// </summary>
 [RequireComponent(typeof(Rigidbody), typeof(Animator))]
 public class PlayerController : MonoBehaviour
@@ -23,9 +23,16 @@ public class PlayerController : MonoBehaviour
     public static PlayerController Instance { get; private set; }
     public bool m_damageFrag = false;
 
+    AudioSource audioSource;
+    [SerializeField] AudioClip m_attackSound;
+    [SerializeField] AudioClip m_damageSound;
+    [SerializeField] AudioClip m_dieSound;
+    [SerializeField] AudioClip m_slashSound;
+
     void Start()
     {
         Instance = this;
+        audioSource = GetComponent<AudioSource>();
         m_rb = GetComponent<Rigidbody>();
         m_anim = GetComponent<Animator>();
         m_enemyDetector = GetComponent<EnemyDetector>();
@@ -108,5 +115,14 @@ public class PlayerController : MonoBehaviour
                 (float)m_life / m_maxLife,
                 1f);
         }
+    }
+    public void AttackSoundPlay()
+    {
+        audioSource.PlayOneShot(m_attackSound);
+    }
+    public void DamageSoundPlay()
+    {
+        audioSource.PlayOneShot(m_damageSound);
+        //audioSource.PlayOneShot(m_slashSound);
     }
 }
