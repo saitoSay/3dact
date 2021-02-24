@@ -22,12 +22,15 @@ public class PlayerController : MonoBehaviour
     EnemyDetector m_enemyDetector = null;
     public static PlayerController Instance { get; private set; }
     public bool m_damageFrag = false;
+    public bool m_gameoverFrag = false;
 
     AudioSource audioSource;
     [SerializeField] AudioClip m_attackSound;
     [SerializeField] AudioClip m_damageSound;
     [SerializeField] AudioClip m_dieSound;
     [SerializeField] AudioClip m_slashSound;
+
+    [SerializeField] GameObject m_gameoverPrefab;
 
     void Start()
     {
@@ -100,21 +103,25 @@ public class PlayerController : MonoBehaviour
     public void Damage()
     {
         m_life -= 1;
-        if (m_life <= 0)
-        {
-            Destroy(this.gameObject);
-        }
-        else
-        {
-            m_anim.Play("Damaged");
-            DOTween.To(() => m_lifeGauge.value,
-                l =>
+        m_anim.Play("Damaged");
+        DOTween.To(() => m_lifeGauge.value,
+            l =>
+            {
+                if (m_life <= 0)
                 {
-                    m_lifeGauge.value = l;
-                },
-                (float)m_life / m_maxLife,
-                1f);
-        }
+                    //Destroy(this.gameObject);
+                    this.gameObject.SetActive(false);
+                    if (!m_gameoverFrag)
+                    {
+                        Instantiate(m_gameoverPrefab, this.gameObject.transform.position, this.transform.rotation);
+                        m_gameoverFrag = true;
+                    }
+                }
+                m_lifeGauge.value = l;
+            },
+            (float)m_life / m_maxLife,
+            1f);
+
     }
     public void AttackSoundPlay()
     {

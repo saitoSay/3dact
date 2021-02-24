@@ -13,7 +13,7 @@ public class PlayerIconController : MonoBehaviour
     }
     void Update()
     {
-        if (PlayerController.Instance.m_damageFrag)
+        if (PlayerController.Instance.m_damageFrag || PlayerController.Instance.m_gameoverFrag)
         {
             m_playerIcon.sprite = m_sprites[1];
         }
