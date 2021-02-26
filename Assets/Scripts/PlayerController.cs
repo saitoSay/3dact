@@ -9,17 +9,22 @@ using DG.Tweening;
 [RequireComponent(typeof(Rigidbody), typeof(Animator))]
 public class PlayerController : MonoBehaviour
 {
-
+    /// <summary>移動速度</summary>
     [SerializeField] float m_movingSpeed = 5f;
+    /// <summary>回転速度</summary>
     [SerializeField] float m_turnSpeed = 3f;
-
     Rigidbody m_rb;
     Animator m_anim;
+    /// <summary>攻撃時の当たり判定</summary>
     [SerializeField] GameObject m_attackCollider = null;
+    /// <summary>現在の体力</summary>
     [SerializeField] int m_life = 1;
+    /// <summary>体力の最大値</summary>
     [SerializeField] int m_maxLife = 2;
     [SerializeField] Slider m_lifeGauge = null;
     EnemyDetector m_enemyDetector = null;
+
+    /// <summary>プレイヤーの情報</summary>
     public static PlayerController Instance { get; private set; }
     public bool m_damageFrag = false;
     public bool m_gameoverFrag = false;
@@ -109,7 +114,6 @@ public class PlayerController : MonoBehaviour
             {
                 if (m_life <= 0)
                 {
-                    //Destroy(this.gameObject);
                     this.gameObject.SetActive(false);
                     if (!m_gameoverFrag)
                     {
@@ -130,6 +134,5 @@ public class PlayerController : MonoBehaviour
     public void DamageSoundPlay()
     {
         audioSource.PlayOneShot(m_damageSound);
-        //audioSource.PlayOneShot(m_slashSound);
     }
 }

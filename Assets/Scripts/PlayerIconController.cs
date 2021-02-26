@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+/// <summary>プレイヤーアイコンの変更用コンポーネント</summary>
 public class PlayerIconController : MonoBehaviour
 {
-
     private Image m_playerIcon = null;
     [SerializeField] Sprite[] m_sprites = null;
     void Start()
